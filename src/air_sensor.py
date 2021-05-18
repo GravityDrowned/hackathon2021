@@ -8,13 +8,22 @@ import time
 
 
 def read_air_data():
-    air_quality_score = -1
+    # ToDo: value checks
+    ex_gas = None
+    ex_humidity = None
+    ex_air_quality_score = None
+    ex_temperature = None
+    ex_pressure = None
+    ex_altitude = None
+
     if sensor.get_sensor_data():
+        '''
         print("altitude:", af_bme680.altitude)
         output = '{0:.2f} C,{1:.2f} hPa,{2:.2f} %RH'.format(
-            sensor.data.temperature,
-            sensor.data.pressure,
-            sensor.data.humidity)
+            '''
+        ex_temperature = sensor.data.temperature
+        ex_pressure = sensor.data.pressure
+        ex_humidity = sensor.data.humidity
 
         if sensor.data.heat_stable:
             gas = sensor.data.gas_resistance
@@ -44,13 +53,16 @@ def read_air_data():
 
             # Calculate air_quality_score.
             air_quality_score = hum_score + gas_score
+            ex_air_quality_score = air_quality_score
+            '''
             print(air_quality_score)
 
             print('Gas: {0:.2f} Ohms,humidity: {1:.2f} %RH,air quality: {2:.2f}'.format(
                 gas,
                 hum,
                 air_quality_score))
-
+            '''
+        '''
         if sensor.data.heat_stable:
             print('{0},{1} %'.format(
                 output,
@@ -58,6 +70,9 @@ def read_air_data():
 
         else:
             print(output)
+        '''
+        return ex_gas, ex_humidity, ex_air_quality_score, ex_temperature, ex_pressure, ex_altitude
+
 
 def config_new_gas_baseline():
     '''
@@ -72,7 +87,6 @@ def config_new_gas_baseline():
 
     burn_in_data = []
 
-
     print('Collecting gas resistance burn-in data for 5 mins\n')
     while curr_time - start_time < burn_in_time:
         curr_time = time.time()
@@ -85,7 +99,6 @@ def config_new_gas_baseline():
     gas_baseline = sum(burn_in_data[-50:]) / 50.0
 
     return gas_baseline
-
 
 
 print("""read-all.py - Displays temperature, pressure, humidity, and gas.
@@ -160,9 +173,9 @@ sensor.select_gas_heater_profile(0)
 print('\n\nPolling:')
 try:
     while True:
-        read_air_data()
+        ex_gas, ex_humidity, ex_air_quality_score, ex_temperature, ex_pressure, ex_altitude = read_air_data()
+        print(ex_gas, ex_humidity, ex_air_quality_score, ex_temperature, ex_pressure, ex_altitude)
         time.sleep(1)
 
 except KeyboardInterrupt:
     pass
-
