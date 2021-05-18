@@ -78,7 +78,8 @@ try:
                 sensor.data.pressure,
                 sensor.data.humidity)
 
-            if sensor.get_sensor_data() and sensor.data.heat_stable:
+            print('heat_stable:', sensor.data.heat_stable)
+            if sensor.data.heat_stable:
                 gas = sensor.data.gas_resistance
                 gas_offset = gas_baseline - gas
 
@@ -106,6 +107,7 @@ try:
 
                 # Calculate air_quality_score.
                 air_quality_score = hum_score + gas_score
+                print(air_quality_score)
 
                 print('Gas: {0:.2f} Ohms,humidity: {1:.2f} %RH,air quality: {2:.2f}'.format(
                     gas,
