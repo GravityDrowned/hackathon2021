@@ -71,6 +71,7 @@ sensor.select_gas_heater_profile(0)
 print('\n\nPolling:')
 try:
     while True:
+        air_quality_score = -1
         if sensor.get_sensor_data():
             output = '{0:.2f} C,{1:.2f} hPa,{2:.2f} %RH'.format(
                 sensor.data.temperature,
