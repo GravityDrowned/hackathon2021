@@ -10,7 +10,7 @@ Gas baseline: 683113.0155294954 Ohms, humidity baseline: 40.00 %RH
 import time
 import board
 from busio import I2C
-import adafruit_bme680
+#import adafruit_bme680
 import bme680
 
 
@@ -24,9 +24,15 @@ hum_baseline = 40.0
 hum_weighting = 0.25
 # Create library object using our Bus I2C port
 i2c = I2C(board.SCL, board.SDA)
-bme680 = adafruit_bme680.Adafruit_BME680_I2C(i2c, debug=False)
+
+#bme680 = adafruit_bme680.Adafruit_BME680_I2C(i2c, debug=False)
+try:
+    sensor = bme680.BME680(bme680.I2C_ADDR_PRIMARY)
+except (RuntimeError, IOError):
+    sensor = bme680.BME680(bme680.I2C_ADDR_SECONDARY)
+
 # change this to match the location's pressure (hPa) at sea level
-bme680.sea_level_pressure = 1013.25
+sensor.sea_level_pressure = 1013.25
 while True:
     print("\nTemperature: %0.1f C" % bme680.temperature)
     print("Gas: %d ohm" % bme680.gas)
