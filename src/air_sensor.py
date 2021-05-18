@@ -26,6 +26,7 @@ def read_air_data():
         "temperature": 0,
         "pressure": 0,
         "altitude": 0,
+        "date":0
     }
 
 
@@ -190,7 +191,7 @@ print('\n\nPolling:')
 try:
     while True:
         air_sensor_data = read_air_data()
-        print(datetime.fromtimestamp(time.time()))
+        air_sensor_data['date'] = datetime.fromtimestamp(time.time())
         print(air_sensor_data)
         time.sleep(1)
 
