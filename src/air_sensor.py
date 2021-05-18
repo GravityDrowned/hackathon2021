@@ -13,7 +13,7 @@ import board
 from busio import I2C
 import adafruit_bme680 as af_bme680
 import time
-import datetime
+from datetime import datetime
 
 
 def read_air_data():
