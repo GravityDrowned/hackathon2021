@@ -196,7 +196,7 @@ try:
         print(air_sensor_data)
 
         a_file = open("data/data.json", "a")
-        json.dump(air_sensor_data, a_file)
+        json.dump(air_sensor_data+'\n', a_file)
         a_file.close()
 
         time.sleep(5)
