@@ -174,6 +174,7 @@ prometheus-client==0.8.0
 prompt-toolkit==3.0.7
 protobuf==3.13.0
 psutil @ file:///opt/concourse/worker/volumes/live/abb7a219-3a4a-4ff9-4158-148060faae29/volume/psutil_1598370243710/work
+psycopg2==2.8.6
 ptyprocess==0.6.0
 py @ file:///tmp/build/80754af9/py_1593446248552/work
 pyasn1==0.4.8
