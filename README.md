@@ -73,6 +73,10 @@ To get a local copy up and running follow these example steps.
 ### Prerequisites
 You'll need python and pip (or some other way to get python libs).
 
+Sensors used:
+- LK-Light-SEN
+- SEN-BME680
+
 ### Installation
 
 1. Clone the repo
