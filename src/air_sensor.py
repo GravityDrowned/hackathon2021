@@ -6,6 +6,88 @@ from busio import I2C
 import adafruit_bme680 as af_bme680
 import time
 
+
+def read_air_data():
+    air_quality_score = -1
+    if sensor.get_sensor_data():
+        print("altitude:", af_bme680.altitude)
+        output = '{0:.2f} C,{1:.2f} hPa,{2:.2f} %RH'.format(
+            sensor.data.temperature,
+            sensor.data.pressure,
+            sensor.data.humidity)
+
+        if sensor.data.heat_stable:
+            gas = sensor.data.gas_resistance
+            gas_offset = gas_baseline - gas
+
+            hum = sensor.data.humidity
+            hum_offset = hum - hum_baseline
+
+            # Calculate hum_score as the distance from the hum_baseline.
+            if hum_offset > 0:
+                hum_score = (100 - hum_baseline - hum_offset)
+                hum_score /= (100 - hum_baseline)
+                hum_score *= (hum_weighting * 100)
+
+            else:
+                hum_score = (hum_baseline + hum_offset)
+                hum_score /= hum_baseline
+                hum_score *= (hum_weighting * 100)
+
+            # Calculate gas_score as the distance from the gas_baseline.
+            if gas_offset > 0:
+                gas_score = (gas / gas_baseline)
+                gas_score *= (100 - (hum_weighting * 100))
+
+            else:
+                gas_score = 100 - (hum_weighting * 100)
+
+            # Calculate air_quality_score.
+            air_quality_score = hum_score + gas_score
+            print(air_quality_score)
+
+            print('Gas: {0:.2f} Ohms,humidity: {1:.2f} %RH,air quality: {2:.2f}'.format(
+                gas,
+                hum,
+                air_quality_score))
+
+        if sensor.data.heat_stable:
+            print('{0},{1} %'.format(
+                output,
+                air_quality_score))
+
+        else:
+            print(output)
+
+def config_new_gas_baseline():
+    '''
+    # Collect gas resistance burn-in values, then use the average
+    # of the last 50 values to set the upper limit for calculating
+    # gas_baseline.
+    :return: new gase baseline value
+    '''
+    start_time = time.time()
+    curr_time = time.time()
+    burn_in_time = 300
+
+    burn_in_data = []
+
+
+    print('Collecting gas resistance burn-in data for 5 mins\n')
+    while curr_time - start_time < burn_in_time:
+        curr_time = time.time()
+        if sensor.get_sensor_data() and sensor.data.heat_stable:
+            gas = sensor.data.gas_resistance
+            burn_in_data.append(gas)
+            print('Gas: {0} Ohms'.format(gas))
+            time.sleep(1)
+
+    gas_baseline = sum(burn_in_data[-50:]) / 50.0
+
+    return gas_baseline
+
+
+
 print("""read-all.py - Displays temperature, pressure, humidity, and gas.
 
 Press Ctrl+C to exit!
@@ -45,8 +127,6 @@ sensor.set_temperature_oversample(bme680.OS_8X)
 sensor.set_filter(bme680.FILTER_SIZE_3)
 sensor.set_gas_status(bme680.ENABLE_GAS_MEAS)
 
-# ToDo: config method
-
 # Set the gas base_line to Michaels room
 gas_baseline = 683113.0155294954
 
@@ -80,58 +160,9 @@ sensor.select_gas_heater_profile(0)
 print('\n\nPolling:')
 try:
     while True:
-        air_quality_score = -1
-        if sensor.get_sensor_data():
-            print("altitude:", af_bme680.altitude)
-            output = '{0:.2f} C,{1:.2f} hPa,{2:.2f} %RH'.format(
-                sensor.data.temperature,
-                sensor.data.pressure,
-                sensor.data.humidity)
-
-            if sensor.data.heat_stable:
-                gas = sensor.data.gas_resistance
-                gas_offset = gas_baseline - gas
-
-                hum = sensor.data.humidity
-                hum_offset = hum - hum_baseline
-
-                # Calculate hum_score as the distance from the hum_baseline.
-                if hum_offset > 0:
-                    hum_score = (100 - hum_baseline - hum_offset)
-                    hum_score /= (100 - hum_baseline)
-                    hum_score *= (hum_weighting * 100)
-
-                else:
-                    hum_score = (hum_baseline + hum_offset)
-                    hum_score /= hum_baseline
-                    hum_score *= (hum_weighting * 100)
-
-                # Calculate gas_score as the distance from the gas_baseline.
-                if gas_offset > 0:
-                    gas_score = (gas / gas_baseline)
-                    gas_score *= (100 - (hum_weighting * 100))
-
-                else:
-                    gas_score = 100 - (hum_weighting * 100)
-
-                # Calculate air_quality_score.
-                air_quality_score = hum_score + gas_score
-                print(air_quality_score)
-
-                print('Gas: {0:.2f} Ohms,humidity: {1:.2f} %RH,air quality: {2:.2f}'.format(
-                    gas,
-                    hum,
-                    air_quality_score))
-
-            if sensor.data.heat_stable:
-                print('{0},{1} %'.format(
-                    output,
-                    air_quality_score))
-
-            else:
-                print(output)
-
+        read_air_data()
         time.sleep(1)
 
 except KeyboardInterrupt:
     pass
+
