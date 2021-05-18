@@ -180,8 +180,8 @@ sensor.select_gas_heater_profile(0)
 print('\n\nPolling:')
 try:
     while True:
-        ex_gas, ex_humidity, ex_air_quality_score, ex_temperature, ex_pressure, ex_altitude = read_air_data()
-        print(ex_gas, ex_humidity, ex_air_quality_score, ex_temperature, ex_pressure, ex_altitude)
+        air_sensor_data = read_air_data()
+        print(air_sensor_data)
         time.sleep(1)
 
 except KeyboardInterrupt:
