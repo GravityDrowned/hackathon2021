@@ -13,6 +13,7 @@ import board
 from busio import I2C
 import adafruit_bme680 as af_bme680
 import time
+import datetime
 
 
 def read_air_data():
@@ -189,7 +190,7 @@ print('\n\nPolling:')
 try:
     while True:
         air_sensor_data = read_air_data()
-        print(time.time())
+        print(datetime.fromtimestamp(time.time()))
         print(air_sensor_data)
         time.sleep(1)
 
