@@ -11,6 +11,8 @@ import time
 import board
 from busio import I2C
 import adafruit_bme680
+import bme680
+
 
 
 #Gas baseline: 683113.0155294954 Ohms, humidity baseline: 40.00 %RH
