@@ -55,10 +55,15 @@ try:
     while True:
         if sensor.get_sensor_data():
             print("\nTemperature: %0.1f C" % sensor.data.temperature)
-            print("Gas: %d ohm" % sensor.data.gas)
+            #print("Gas: %d ohm" % sensor.data.gas)
             print("Humidity: %0.1f %%" % sensor.data.humidity)
             print("Pressure: %0.3f hPa" % sensor.data.pressure)
             print("Altitude = %0.2f meters" % sensor.data.altitude)
+
+            if sensor.data.heat_stable:
+                print('{0} Ohms'.format(sensor.data.gas_resistance))
+
+
             time.sleep(1)
 
 except KeyboardInterrupt:
