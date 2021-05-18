@@ -19,7 +19,6 @@ def readadc(adcnum):
     return adcout
 
 
-
 while True:
     value = readadc(temp)
     print("Value: " + str(value))
