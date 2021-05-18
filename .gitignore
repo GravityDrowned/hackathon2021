@@ -128,8 +128,11 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# etc folder
-etc
+# tmp folder
+tmp
+
+# local.py in the settings dir of the djBackend
+djBackend/djBackend/local.py
 
 # pyCharm folders
 djBackend/.idea
