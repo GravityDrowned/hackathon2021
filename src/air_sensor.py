@@ -1,4 +1,3 @@
-# https://learn.pimoroni.com/tutorial/sandyj/getting-started-with-bme680-breakout
 
 '''
 In our example of how to convert the BME680's gas resistance readings into a percentage indoor air quality (IAQ),
@@ -7,9 +6,6 @@ factored in humidity with a weighting of 75:25 for gas:humidity, as humidity als
 
 Gas baseline: 683113.0155294954 Ohms, humidity baseline: 40.00 %RH
 
-
-
-'''
 '''
 import time
 import board
@@ -17,6 +13,13 @@ from busio import I2C
 import adafruit_bme680
 
 
+#Gas baseline: 683113.0155294954 Ohms, humidity baseline: 40.00 %RH
+gas_baseline = 683113.0155294954
+# Set the humidity baseline to 40%, an optimal indoor humidity.
+hum_baseline = 40.0
+# This sets the balance between humidity and gas reading in the
+# calculation of air_quality_score (25:75, humidity:gas)
+hum_weighting = 0.25
 # Create library object using our Bus I2C port
 i2c = I2C(board.SCL, board.SDA)
 bme680 = adafruit_bme680.Adafruit_BME680_I2C(i2c, debug=False)
@@ -28,43 +31,39 @@ while True:
     print("Humidity: %0.1f %%" % bme680.humidity)
     print("Pressure: %0.3f hPa" % bme680.pressure)
     print("Altitude = %0.2f meters" % bme680.altitude)
+
+    try:
+        sensor = bme680.BME680(bme680.I2C_ADDR_PRIMARY)
+    except (RuntimeError, IOError):
+        sensor = bme680.BME680(bme680.I2C_ADDR_SECONDARY)
+
+    if sensor.get_sensor_data() and sensor.data.heat_stable:
+        gas = sensor.data.gas_resistance
+        gas_offset = gas_baseline - gas
+
+        hum = sensor.data.humidity
+        hum_offset = hum - hum_baseline
+
+        # Calculate hum_score as the distance from the hum_baseline.
+        if hum_offset > 0:
+            hum_score = (100 - hum_baseline - hum_offset)
+            hum_score /= (100 - hum_baseline)
+            hum_score *= (hum_weighting * 100)
+
+        else:
+            hum_score = (hum_baseline + hum_offset)
+            hum_score /= hum_baseline
+            hum_score *= (hum_weighting * 100)
+
+        # Calculate gas_score as the distance from the gas_baseline.
+        if gas_offset > 0:
+            gas_score = (gas / gas_baseline)
+            gas_score *= (100 - (hum_weighting * 100))
+
+        else:
+            gas_score = 100 - (hum_weighting * 100)
+
+        # Calculate air_quality_score.
+        air_quality_score = hum_score + gas_score
+
     time.sleep(1)
-'''
-
-import time
-import bme680
-
-
-try:
-    sensor = bme680.BME680(bme680.I2C_ADDR_PRIMARY)
-except (RuntimeError, IOError):
-    sensor = bme680.BME680(bme680.I2C_ADDR_SECONDARY)
-
-# These oversampling settings can be tweaked to
-# change the balance between accuracy and noise in
-# the data.
-
-bme680.sea_level_pressure = 1013.25
-sensor.set_humidity_oversample(bme680.OS_2X)
-sensor.set_pressure_oversample(bme680.OS_4X)
-sensor.set_temperature_oversample(bme680.OS_8X)
-sensor.set_filter(bme680.FILTER_SIZE_3)
-
-print('Polling:')
-try:
-    while True:
-        if sensor.get_sensor_data():
-            print("\nTemperature: %0.1f C" % sensor.data.temperature)
-            #print("Gas: %d ohm" % sensor.data.gas)
-            print("Humidity: %0.1f %%" % sensor.data.humidity)
-            print("Pressure: %0.3f hPa" % sensor.data.pressure)
-            print("Altitude = %0.2f meters" % sensor.data.altitude)
-
-            if sensor.data.heat_stable:
-                print('{0} Ohms'.format(sensor.data.gas_resistance))
-
-
-            time.sleep(1)
-
-except KeyboardInterrupt:
-    pass
