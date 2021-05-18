@@ -9,27 +9,34 @@ import time
 
 def read_air_data():
     # ToDo: value checks
-    ex_gas = None
-    ex_humidity = None
-    ex_air_quality_score = None
-    ex_temperature = None
-    ex_pressure = None
-    ex_altitude = None
+
+    air_sensors = {
+        "gas": 0,
+        "humidity": 0,
+        "air_quality_score": -1,
+        "temperature": 0,
+        "pressure": 0,
+        "altitude": 0,
+    }
+
 
     if sensor.get_sensor_data():
+
         '''
         print("altitude:", af_bme680.altitude)
         output = '{0:.2f} C,{1:.2f} hPa,{2:.2f} %RH'.format(
             '''
-        ex_temperature = sensor.data.temperature
-        ex_pressure = sensor.data.pressure
-        ex_humidity = sensor.data.humidity
+        air_sensors["altitude"] = af_bme680.altitude
+        air_sensors["temperature"] = sensor.data.temperature
+        air_sensors["pressure"] = sensor.data.pressure
 
         if sensor.data.heat_stable:
             gas = sensor.data.gas_resistance
+            air_sensors["gas"] = gas
             gas_offset = gas_baseline - gas
 
             hum = sensor.data.humidity
+            air_sensors["humidity"] = hum
             hum_offset = hum - hum_baseline
 
             # Calculate hum_score as the distance from the hum_baseline.
@@ -53,7 +60,7 @@ def read_air_data():
 
             # Calculate air_quality_score.
             air_quality_score = hum_score + gas_score
-            ex_air_quality_score = air_quality_score
+            air_sensors["air_quality_score"] = air_quality_score
             '''
             print(air_quality_score)
 
@@ -71,7 +78,7 @@ def read_air_data():
         else:
             print(output)
         '''
-        return ex_gas, ex_humidity, ex_air_quality_score, ex_temperature, ex_pressure, ex_altitude
+        return air_sensors
 
 
 def config_new_gas_baseline():
