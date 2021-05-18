@@ -36,6 +36,7 @@ def read_air_data():
         print("altitude:", af_bme680.altitude)
         output = '{0:.2f} C,{1:.2f} hPa,{2:.2f} %RH'.format(
             '''
+        air_sensors['date'] = datetime.fromtimestamp(time.time())
         air_sensors["altitude"] = af_bme680.altitude
         air_sensors["temperature"] = sensor.data.temperature
         air_sensors["pressure"] = sensor.data.pressure
@@ -191,7 +192,6 @@ print('\n\nPolling:')
 try:
     while True:
         air_sensor_data = read_air_data()
-        air_sensor_data['date'] = datetime.fromtimestamp(time.time())
         print(air_sensor_data)
         time.sleep(1)
 
