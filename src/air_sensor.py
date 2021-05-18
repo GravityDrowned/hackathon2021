@@ -73,12 +73,12 @@ try:
     while True:
         air_quality_score = -1
         if sensor.get_sensor_data():
+            print("altitude:", sensor.data.altitude)
             output = '{0:.2f} C,{1:.2f} hPa,{2:.2f} %RH'.format(
                 sensor.data.temperature,
                 sensor.data.pressure,
                 sensor.data.humidity)
 
-            print('heat_stable:', sensor.data.heat_stable)
             if sensor.data.heat_stable:
                 gas = sensor.data.gas_resistance
                 gas_offset = gas_baseline - gas
