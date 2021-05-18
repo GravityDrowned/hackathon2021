@@ -14,6 +14,7 @@ from busio import I2C
 import adafruit_bme680 as af_bme680
 import time
 from datetime import datetime
+import json
 
 
 def read_air_data():
@@ -193,7 +194,12 @@ try:
     while True:
         air_sensor_data = read_air_data()
         print(air_sensor_data)
-        time.sleep(1)
+
+        a_file = open("data/data.json", "w")
+        json.dump(air_sensor_data, a_file)
+        a_file.close()
+
+        time.sleep(5)
 
 except KeyboardInterrupt:
     pass
