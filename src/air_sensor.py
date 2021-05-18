@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
 import bme680
+import board
+from busio import I2C
+import adafruit_bme680 as af_bme680
 import time
 
 print("""read-all.py - Displays temperature, pressure, humidity, and gas.
@@ -8,6 +11,12 @@ print("""read-all.py - Displays temperature, pressure, humidity, and gas.
 Press Ctrl+C to exit!
 
 """)
+
+# Create library object using our Bus I2C port
+i2c = I2C(board.SCL, board.SDA)
+af_bme680 = af_bme680.Adafruit_BME680_I2C(i2c, debug=False)
+# change this to match the location's pressure (hPa) at sea level
+af_bme680.sea_level_pressure = 1013.25
 
 try:
     sensor = bme680.BME680(bme680.I2C_ADDR_PRIMARY)
@@ -73,7 +82,7 @@ try:
     while True:
         air_quality_score = -1
         if sensor.get_sensor_data():
-            print("altitude:", sensor.data.altitude)
+            print("altitude:", af_bme680.altitude)
             output = '{0:.2f} C,{1:.2f} hPa,{2:.2f} %RH'.format(
                 sensor.data.temperature,
                 sensor.data.pressure,
