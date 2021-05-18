@@ -1,5 +1,13 @@
 #!/usr/bin/env python
 
+'''
+Dokus
+- https://learn.pimoroni.com/tutorial/sandyj/getting-started-with-bme680-breakout
+- https://www.gotronic.fr/pj2-sen-bme680-manual-20-05-19-2007.pdf
+- https://joy-it.net/files/files/Produkte/SEN-BME680/SEN-BME680-Datasheet.pdf
+- Tipp, check out /home/pi/bme680/examples for really useful examples (most of this code is based on them)
+'''
+
 import bme680
 import board
 from busio import I2C
@@ -181,6 +189,7 @@ print('\n\nPolling:')
 try:
     while True:
         air_sensor_data = read_air_data()
+        print(time.time())
         print(air_sensor_data)
         time.sleep(1)
 
