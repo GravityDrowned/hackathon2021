@@ -37,7 +37,7 @@ def read_air_data():
         print("altitude:", af_bme680.altitude)
         output = '{0:.2f} C,{1:.2f} hPa,{2:.2f} %RH'.format(
             '''
-        air_sensors['date'] = datetime.fromtimestamp(time.time())
+        air_sensors['date'] = str(datetime.fromtimestamp(time.time()))
         air_sensors["altitude"] = af_bme680.altitude
         air_sensors["temperature"] = sensor.data.temperature
         air_sensors["pressure"] = sensor.data.pressure
