@@ -75,8 +75,7 @@ try:
             output = '{0:.2f} C,{1:.2f} hPa,{2:.2f} %RH'.format(
                 sensor.data.temperature,
                 sensor.data.pressure,
-                sensor.data.humidity,
-                air_quality_score)
+                sensor.data.humidity)
 
             if sensor.get_sensor_data() and sensor.data.heat_stable:
                 gas = sensor.data.gas_resistance
