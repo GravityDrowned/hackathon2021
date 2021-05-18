@@ -195,7 +195,7 @@ try:
         air_sensor_data = read_air_data()
         print(air_sensor_data)
 
-        a_file = open("data/data.json", "w")
+        a_file = open("data/data.json", "a")
         json.dump(air_sensor_data, a_file)
         a_file.close()
 
