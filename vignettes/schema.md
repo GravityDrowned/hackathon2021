@@ -10,10 +10,9 @@ For starters of our implementation, the following are perhaps the most simplisti
 
 ---
 
-## Areas
-
+## AreaType
 * id 
-* areaType, areaCode
+* type, code
 	* deskArea, DA
 	* meetingRoom1, MR1
 	* meetingRoom2, MR2
@@ -28,40 +27,46 @@ For starters of our implementation, the following are perhaps the most simplisti
 	* kitchen, KI
 	* misc, MISC
 
-* maxCapacity
+* max_capacity
 
 ---
 
-## Sensors
+## Area
+
+* id (uuid)
+* name (formatted name; user-readable; unique within floors and not necessarily across the floors)
+* type (FK on AreaType)
+* floor 
+* sensors (a json list of sensors (ids) in the area)
+
+---
+
+## SensorType
 
 * id
-* sensorType, sensorCode
+* type, code
 	* temperature, TEMP
 	* moisture, MOIS
 	* light, LI
 	* luminosity, LUMI
-	* airQuality, AQI
+	* interiorAirQuality, IAQ
 	* airPurifier, APU
 	...
 * unit
 
 ---
 
-## Floor
+## Sensor
 
-* id
-* floorNumber
-* areaType
-* sensors
+* id (uuid)
+* type (FK on SensorType)
 
 ---
 
-## OperatingTable
+## WorkingTable
 
-* dateTimeStamp
-* floor_id
-* area_id
-* sensor_id
-* sensorValue
-* occupied
+* timestamp
+* area
+* sensor
+* sensor_value
 ...
