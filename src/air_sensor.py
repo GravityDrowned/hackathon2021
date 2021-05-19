@@ -194,8 +194,12 @@ sensor.select_gas_heater_profile(0)
 # sensor.select_gas_heater_profile(1)
 
 print('\n\nPolling:')
+
+gas_baseline = config_new_gas_baseline()
+
 try:
     while True:
+
         air_sensor_data = read_air_data()
         print(air_sensor_data)
 
