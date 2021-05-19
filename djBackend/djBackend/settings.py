@@ -145,3 +145,10 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny'
     ]
 }
+
+try:
+    from .local import *
+except Exception as e:
+    print(f"Got Exception {e}")
+    pass
+
