@@ -16,6 +16,8 @@ import time
 from datetime import datetime
 import json
 
+from src.server_interface import send_to_server
+
 
 def read_air_data():
     # ToDo: value checks
@@ -207,6 +209,9 @@ try:
         json.dump(air_sensor_data, a_file)
         a_file.write('\n')
         a_file.close()
+
+        send_to_server(air_sensor_data)
+
 
         time.sleep(5)
 
