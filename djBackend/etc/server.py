@@ -14,5 +14,3 @@ DATABASES = {
         'HOST': '<IP ADD>',
         'PORT': 5432,
     }}
-
-

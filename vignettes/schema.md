@@ -44,7 +44,7 @@ For starters of our implementation, the following are perhaps the most simplisti
 ## SensorType
 
 * id
-* type, code
+* name, type (pk)
 	* temperature, TEMP
 	* moisture, MOIS
 	* light, LI
