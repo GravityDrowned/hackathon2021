@@ -213,7 +213,7 @@ try:
         send_to_server(air_sensor_data)
 
 
-        time.sleep(5)
+        time.sleep(15)
 
 except KeyboardInterrupt:
     pass
