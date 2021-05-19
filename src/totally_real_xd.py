@@ -1,7 +1,7 @@
 from read_savefile import read_save
 from server_interface import send_to_server
 
-import pandas as pd
+#import pandas as pd
 from datetime import datetime
 import numpy as np
 # import datetime
