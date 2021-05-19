@@ -1,7 +1,6 @@
 import datetime
 import time
 from datetime import datetime
-import pandas as pd
 from src.read_savefile import read_save
 import requests
 import json
