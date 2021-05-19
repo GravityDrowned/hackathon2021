@@ -160,6 +160,9 @@ sensor.set_filter(bme680.FILTER_SIZE_3)
 sensor.set_gas_status(bme680.ENABLE_GAS_MEAS)
 
 # Set the gas base_line to Michaels room
+# Gas baseline: 513167.601746637 Ohms, humidity baseline: 40.00 %RH
+
+
 gas_baseline = 683113.0155294954
 
 # Set the humidity baseline to 40%, an optimal indoor humidity.
