@@ -16,7 +16,7 @@ import time
 from datetime import datetime
 import json
 
-from src.server_interface import send_to_server
+from server_interface import send_to_server
 
 
 def read_air_data():
