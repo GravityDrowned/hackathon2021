@@ -1,6 +1,8 @@
 # copy this as `local.py` into the `djBackend` folder if on the server system
 SERVER_ENV = True
 
+DEBUG = False
+
 ALLOWED_HOSTS = ["<IP ADD>", "localhost"]
 
 DATABASES = {
