@@ -1,7 +1,7 @@
 import datetime
 import time
 from datetime import datetime
-from src.read_savefile import read_save
+from read_savefile import read_save
 import requests
 import json
 
